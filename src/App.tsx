@@ -1,35 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { lazy, Suspense } from "react";
+import {Routes, Route} from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+// pages
+const HomePage = lazy(() => import("./pages/Home"));
+const Playground = lazy(() => import("./pages/Play"));
+const Dev = lazy(() => import("./pages/Dev"));
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+// components
+import Loader from "./components/Loader";
 
-export default App
+const App = () => (
+    <Routes>
+      <Route index element={<Suspense fallback={<Loader />}><HomePage /></Suspense>} />
+      <Route path="/play" element={<Suspense fallback={<Loader />}><Playground /></Suspense>} />
+      <Route path="/dev" element={<Suspense fallback={<Loader />}><Dev /></Suspense>} />
+    </Routes>
+)
+
+export default App;
