@@ -1,4 +1,4 @@
-import {z} from "zod";
+import {noUnrecognized, z} from "zod";
 
 const NodeDataSchema = z.enum(['path', 'start', 'target', 'wall']);
 
@@ -36,10 +36,6 @@ export class Graph {
     constructor(width: number, height: number){
         this.width = sizeSchema.parse(width);
         this.height = sizeSchema.parse(height);
-        this.graph = this.constructGraph();
-    }
-
-    private constructGraph() {
-        return new Node('path');
+        this.graph = new Node("path");
     }
 }
