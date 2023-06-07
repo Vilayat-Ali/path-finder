@@ -27,6 +27,8 @@ const NodeNextSchema = z.object({
 
 const nodeSchema = z.instanceof(Node);
 const sizeSchema = z.number().min(1).nonnegative();
+ 
+const sizeInputSchema = z.number().max(110).nonnegative();
 
 export class Graph {
     public graph: z.infer<typeof nodeSchema>;
@@ -43,10 +45,15 @@ export class Graph {
     private initGraph() {
         let graph: z.infer<typeof nodeSchema> = nodeSchema.parse(Graph.generateDoublyLinkedList(this.width));
 
-        for(let col=1; col<this.width; col++) {
+        for(let row=1; row<this.height; row++) {
             const currentNode: z.infer<typeof nodeSchema> = nodeSchema.parse(Graph.generateDoublyLinkedList(this.width));
 
+            
         }
+    }
+
+    private static coupleListWithGraph(graph: z.infer<typeof nodeSchema>, list: z.infer<typeof nodeSchema>): z.infer<typeof nodeSchema> {
+        return new Node("path");
     }
 
     private static generateDoublyLinkedList(size: z.infer<typeof sizeSchema>): z.infer<typeof nodeSchema> {
@@ -60,5 +67,16 @@ export class Graph {
         }
 
         return list;
+    }
+
+    public getNodeAt(columnNumber: z.infer<typeof sizeInputSchema>, rowNumber: z.infer<typeof sizeInputSchema>): z.infer<typeof nodeSchema>|unknown {
+       try {
+        if(columnNumber > this.height || rowNumber > this.width) {
+            throw new Error("Error: getNodeAt(x, y) points to coordinates that are out of bounds of graph");
+        }
+
+       } catch (err: unknown) {
+        return err;
+       }
     }
 }
