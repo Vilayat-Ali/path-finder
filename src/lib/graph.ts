@@ -1,4 +1,5 @@
 import {z} from "zod";
+import { ErrorBuilder, CustomError } from "../utils/ErrorBuilder";
 
 const NodeDataSchema = z.enum(['path', 'start', 'target', 'wall']);
 
@@ -76,7 +77,9 @@ export class Graph {
         }
 
        } catch (err: unknown) {
-        return err;
+            const errorBuilder = new ErrorBuilder();
+            errorBuilder.addTrace(err as string, "In graph.ts\nIn method call - getNodeAt");
+            return errorBuilder.build;
        }
     }
 }
