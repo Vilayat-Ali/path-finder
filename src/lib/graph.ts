@@ -1,4 +1,4 @@
-import {noUnrecognized, z} from "zod";
+import {z} from "zod";
 
 const NodeDataSchema = z.enum(['path', 'start', 'target', 'wall']);
 
@@ -36,6 +36,29 @@ export class Graph {
     constructor(width: number, height: number){
         this.width = sizeSchema.parse(width);
         this.height = sizeSchema.parse(height);
-        this.graph = new Node("path");
+        // this.graph = this.initGraph();
+        console.log(this.initGraph());
+    }
+
+    private initGraph() {
+        let graph: z.infer<typeof nodeSchema> = nodeSchema.parse(Graph.generateDoublyLinkedList(this.width));
+
+        for(let col=1; col<this.width; col++) {
+            const currentNode: z.infer<typeof nodeSchema> = nodeSchema.parse(Graph.generateDoublyLinkedList(this.width));
+
+        }
+    }
+
+    private static generateDoublyLinkedList(size: z.infer<typeof sizeSchema>): z.infer<typeof nodeSchema> {
+        let list: z.infer<typeof nodeSchema> = new Node("path");
+
+        for(let i=0; i<sizeSchema.parse(size); i++) {
+            const newNode: z.infer<typeof nodeSchema> = new Node("path");
+            list.next.left = newNode;
+            newNode.next.right = list;
+            list = newNode;
+        }
+
+        return list;
     }
 }
